@@ -20,8 +20,7 @@ var urlsToCache = [
     "images/icons/icon-96x96.png",
     "images/icons/icon-72x72.png",
     "images/maskable_icon.png",
-    "pages/competitions.html",
-    "pages/matches.html",
+    "pages/home.html",
     "pages/teams.html",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
     "https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
@@ -65,17 +64,18 @@ self.addEventListener("fetch", e => {
                 })
             })
         );
-    } else if ((e.request.url.indexOf(base_url_logo) > -1)) {
-        e.respondWith(
-            caches.open(CACHE_NAME).then(cache => {
-                return fetch(e.request).then(res => {
-                    console.log("Service Worker: Gunakan Cache " + e.request.url);
-                    cache.put(e.request.url, res.clone());
-                    return res;
-                })
-            })
-        );
     }
+    // else if ((e.request.url.indexOf(base_url_logo) > -1)) {
+    //     e.respondWith(
+    //         caches.open(CACHE_NAME).then(cache => {
+    //             return fetch(e.request).then(res => {
+    //                 console.log("Service Worker: Gunakan Cache " + e.request.url);
+    //                 cache.put(e.request.url, res.clone());
+    //                 return res;
+    //             })
+    //         })
+    //     );
+    // }
     else {
         e.respondWith(
             caches.match(e.request, { ignoreSearch: true }).then(res => {

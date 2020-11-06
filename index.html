@@ -5,7 +5,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>FootMatch</title>
 		<link rel="stylesheet" href="css/materialize.min.css" />
-		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
 		<style>
 			h6.flow-text {
 				white-space: nowrap;
@@ -18,12 +21,14 @@
 				max-width: 100%;
 				margin: 0 auto;
 			}
-            .card-panel{
-                padding: 16px;
-            }
+			.card-panel {
+				padding: 16px;
+			}
 		</style>
 		<link rel="manifest" href="manifest.json" />
 		<script src="js/materialize.min.js"></script>
+		<script src="js/idb.js"></script>
+		<script src="js/db.js"></script>
 		<script src="js/api.js"></script>
 	</head>
 	<body>
@@ -45,8 +50,8 @@
 			window.addEventListener("load", () => {
 				navigator.serviceWorker
 					.register("service-worker.js")
-					.then( _ => console.log("Pendaftaran Service Worker Berhasil"))
-					.catch( _ => console.error("Service Worker gagal didaftarkan"));
+					.then(() => console.log("Pendaftaran Service Worker Berhasil"))
+					.catch(() => console.error("Service Worker gagal didaftarkan"));
 			});
 		} else {
 			console.error("Browser ini tidak mendukung service worker.");

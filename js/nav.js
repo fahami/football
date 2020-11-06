@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (page === "home") {
-                getTeams();
+                // getTeams();
             } else if (page === "teams") {
                 getSavedTeams();
             }
