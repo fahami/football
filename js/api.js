@@ -15,6 +15,48 @@ error = (err) => {
 }
 getTeams = () => {
   var teams = [];
+  if ('caches' in window) {
+    caches.match(base_url + "competitions/2021/teams").then(status).then(json).then(data => {
+      data.teams.forEach(team => {
+        teams.push(team);
+      });
+      return teams;
+    }).then(_ => {
+      caches.match(base_url + "competitions/2021/matches")
+        .then(status)
+        .then(json)
+        .then(data => {
+          var champLeagueHTML = "";
+          data.matches.forEach(match => {
+            teams.forEach((tim) => {
+              if ((match.homeTeam.id == tim.id) && (tim.crestUrl != null)) {
+                champLeagueHTML += `
+                                    <div class="card-panel center-align">
+                                        <p class="card-title">Premiere League</p>
+                                        <div class="row">
+                                        <div class="col s4 m5">
+                                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
+                                            <a href="team.html?id=${match.homeTeam.id}"><h6 class="flow-text">${match.homeTeam.name}</h6></a>
+                                            <small>Home</small>
+                                        </div>
+                                        <div class="col s4 m2">
+                                        <h4>${match.score.fullTime.homeTeam ?? "0"} : ${match.score.fullTime.awayTeam ?? "0"}</h4>
+                                        <span>${match.status}</span>
+                                        </div>
+                                        <div class="col s4 m5">
+                                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
+                                            <a href="team.html?id=${match.awayTeam.id}"><h6 class="flow-text">${match.awayTeam.name}</h6></a>
+                                            <small>Away</small>
+                                        </div>
+                                        </div>
+                                    </div>`;
+              }
+            });
+          });
+          document.getElementById("body-content").innerHTML = champLeagueHTML;
+        })
+    })
+  };
   fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
     .then(status)
     .then(json)
@@ -61,7 +103,6 @@ getTeams = () => {
         .catch(error);
     })
     .catch(error);
-
 }
 
 getTeamById = () => {
