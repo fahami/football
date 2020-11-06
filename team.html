@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>FootMatch</title>
+		<link rel="stylesheet" href="css/materialize.min.css" />
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<style>
+			h6.flow-text {
+				white-space: nowrap;
+				width: 100%;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.club-logo {
+				max-height: 40vw;
+				max-width: 100%;
+				margin: 0 auto;
+				padding: 1em;
+			}
+			.card-panel {
+				padding: 16px;
+			}
+		</style>
+		<link rel="manifest" href="manifest.json" />
+		<script src="js/materialize.min.js"></script>
+	</head>
+	<body>
+		<nav class="green darken-2" role="navigation">
+			<div class="nav-wrapper">
+				<a href="./" class="brand-logo center">FootMatch</a>
+				<a href="./index.html" class="sidenav-trigger">
+					<i class="material-icons">arrow_back</i>
+				</a>
+				<ul class="topnav right hide-on-med-and-down"></ul>
+			</div>
+		</nav>
+		<div class="container" id="body-content"></div>
+		<div class="fixed-action-btn">
+			<a class="btn-floating btn-large red" id="save">
+				<i class="large material-icons">save</i>
+			</a>
+		</div>
+	</body>
+	<script src="js/api.js"></script>
+	<script src="js/idb.js"></script>
+	<script src="js/db.js"></script>
+	<script>
+		if ("serviceWorker" in navigator) {
+			window.addEventListener("load", () => {
+				navigator.serviceWorker
+					.register("service-worker.js")
+					.then(() => console.log("Pendaftaran Service Worker Berhasil"))
+					.catch(() => console.error("Service Worker gagal didaftarkan"));
+			});
+		} else {
+			console.error("Browser ini tidak mendukung service worker.");
+		}
+		document.addEventListener("DOMContentLoaded", () => {
+			var urlParams = new URLSearchParams(window.location.search);
+			var isFromSaved = urlParams.get("saved");
+			var save = document.getElementById("save");
+			if (isFromSaved) {
+				save.style.display = "none";
+				getSavedTeamById();
+			} else {
+				var item = getTeamById();
+			}
+			save.onclick = () => {
+				console.log("Tombol diklik");
+				item.then((team) => {
+					console.log(team);
+					saveTeam(team);
+				});
+			};
+		});
+	</script>
+</html>
