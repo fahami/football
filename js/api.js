@@ -14,7 +14,6 @@ error = (err) => {
   console.error(`Error : ${err}`);
 }
 getTeams = () => {
-  console.log("getTeams dari network");
   var teams = [];
   fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
     .then(status)
