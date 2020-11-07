@@ -166,7 +166,7 @@ getTeamById = () => {
                   <tr>
                       <td>${player.name}</td>
                       <td>${player.position ?? "Official"}</td>
-                      <td>${player.role}</td>
+                      <td class="truncate">${player.role}</td>
                     </tr>`;
                 })
                 document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
@@ -219,7 +219,7 @@ getTeamById = () => {
             <tr>
               <td>${player.name}</td>
               <td>${player.position ?? "Official"}</td>
-              <td>${player.role}</td>
+              <td class="truncate">${player.role}</td>
             </tr>`;
         })
         document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
@@ -229,24 +229,29 @@ getTeamById = () => {
 }
 getSavedTeams = () => {
   getAll().then(teams => {
-    console.log(teams);
-    var savedTeams = `<div class="row center-align">`;
+    var savedTeams = `<div class="row">`;
     teams.forEach(data => {
       savedTeams += `
-      <div class="col s6">
-        <a href="team.html?id=${data.tla}&saved=true">
+      <div class="col s12 m6">
         <div class="card">
-          <div class="card-image waves-effect waves-block waves-light">
-            <img src="${data.crestUrl}" class="club-logo"/>
+          <div class="card-image">
+            <a href="team.html?id=${data.tla}&saved=true">
+              <img src="${data.crestUrl}" class="club-logo">
+            </a>
+            <a class="btn-floating halfway-fab waves-effect waves-light red">
+              <i class="material-icons">delete</i>
+            </a>
           </div>
           <div class="card-content">
             <span class="card-title truncate">${data.name}</span>
+            <span class="valign-wrapper"><i class="material-icons">location_city</i>${data.address}</span>
+            <span class="valign-wrapper"><i class="material-icons">email</i>${data.email ?? "Doesn't Exist"}</span>
+            <span class="valign-wrapper"><i class="material-icons">language</i>${data.website}</span>
           </div>
         </div>
-        </a>
       </div>`;
     })
-    document.getElementById("teams").innerHTML = savedTeams + "</div>";
+    document.getElementById("saved").innerHTML = savedTeams + "</div>";
   })
 }
 
@@ -293,7 +298,7 @@ getSavedTeamById = () => {
         <tr>
             <td>${player.name}</td>
             <td>${player.position ?? "Official"}</td>
-            <td>${player.role}</td>
+            <td class="truncate">${player.role}</td>
           </tr>`;
     })
     document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";

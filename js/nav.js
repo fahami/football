@@ -40,13 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadPage(page) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
-            if (page === "teams") {
-                getSavedTeams();
-            }
+            
             if (this.readyState == 4) {
                 var content = document.querySelector("#body-content");
                 if (this.status == 200) {
                     content.innerHTML = xhttp.responseText;
+                    if (page === "saved") {
+                        getSavedTeams();
+                    } else if (page === "home"){
+                        getTeams();
+                    }
                 } else if (this.status == 404) {
                     content.innerHTML = "<p>Halaman tidak ditemukan.</p>";
                 } else {

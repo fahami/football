@@ -1,4 +1,4 @@
-const CACHE_NAME = "footmatch";
+const CACHE_NAME = "footmatch-v1";
 var urlsToCache = [
     "/",
     "index.html",
@@ -51,39 +51,25 @@ self.addEventListener("activate", e => {
     )
 })
 
-self.addEventListener("fetch", e => {
+self.addEventListener("fetch", event => {
     var base_url = "https://api.football-data.org/v2/";
     var base_url_logo = "https://crests.football-data.org/";
-    if (e.request.url.indexOf(base_url) > -1) {
-        e.respondWith(
-            caches.open(CACHE_NAME).then(cache => {
-                return fetch(e.request).then(res => {
-                    console.log("Service Worker: Gunakan Cache " + e.request.url);
-                    cache.put(e.request.url, res.clone());
-                    return res;
-                })
-            })
-        );
-    }
-    else if ((e.request.url.indexOf(base_url_logo) > -1)) {
-        e.respondWith(
-            caches.open(CACHE_NAME).then(cache => {
-                return fetch(e.request).then(res => {
-                    console.log("Service Worker: Gunakan Cache " + e.request.url);
-                    cache.put(e.request.url, res.clone());
-                    return res;
-                })
-            })
-        );
-    }
-    else {
-        e.respondWith(
-            caches.match(e.request, { ignoreSearch: true }).then(res => {
-                console.log("Service Worker: Gunakan " + e.request.url);
-                return res || fetch(e.request);
-            })
-        )
-    }
+    if (event.request.url.indexOf(base_url) || event.request.url.indexOf(base_url_logo) > -1) {
+		event.respondWith(
+			caches.open(CACHE_NAME).then((cache) => {
+				return fetch(event.request).then((response) => {
+					cache.put(event.request.url, response.clone());
+					return response;
+				})
+			})
+		);
+	} else {
+		event.respondWith(
+			caches.match(event.request,{ignoreSearch:true}).then((response) => {
+				return response || fetch(event.request);
+			})
+		)
+	}
 })
 
 self.addEventListener('push', e => {

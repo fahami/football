@@ -59,8 +59,7 @@
 			}
 			if ("PushManager" in window) {
 				navigator.serviceWorker.getRegistration().then(function (registration) {
-					registration.pushManager
-						.subscribe({
+					registration.pushManager.subscribe({
 							userVisibleOnly: true,
 							applicationServerKey: urlBase64ToUint8Array(
 								"BHGC-JJ3nsXnhH2IvwCPmgkVQqz4vv_U29h2scKfI7YlC5kzcRB0MFKr5djlbD12gxsdMKakivOdBNPDfhHV0rs"
@@ -107,9 +106,6 @@
 				}
 				return outputArray;
 			}
-			document.addEventListener("DOMContentLoaded", function () {
-				getTeams();
-			});
 		</script>
 	</body>
 </html>
