@@ -40,9 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadPage(page) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
-            if (page === "home") {
-                // getTeams();
-            } else if (page === "teams") {
+            if (page === "teams") {
                 getSavedTeams();
             }
             if (this.readyState == 4) {
