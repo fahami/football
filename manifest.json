@@ -2,11 +2,12 @@
     "name": "FootMatch",
     "short_name": "FootMatch",
     "description": "Your daily update football score apps",
-    "start_url": "/football/",
-    "scope": "/football/",
-    "display":"standalone",
+    "gcm_sender_id": "124693896473",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
     "background_color": "#0DB630",
-    "theme_color":"#0DB630",
+    "theme_color": "#0DB630",
     "icons": [
         {
             "src": "images/icons/icon-72x72.png",
@@ -52,7 +53,7 @@
             "src": "images/maskable_icon.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose":"any maskable"
+            "purpose": "any maskable"
         }
     ]
 }

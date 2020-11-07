@@ -65,17 +65,17 @@ self.addEventListener("fetch", e => {
             })
         );
     }
-    // else if ((e.request.url.indexOf(base_url_logo) > -1)) {
-    //     e.respondWith(
-    //         caches.open(CACHE_NAME).then(cache => {
-    //             return fetch(e.request).then(res => {
-    //                 console.log("Service Worker: Gunakan Cache " + e.request.url);
-    //                 cache.put(e.request.url, res.clone());
-    //                 return res;
-    //             })
-    //         })
-    //     );
-    // }
+    else if ((e.request.url.indexOf(base_url_logo) > -1)) {
+        e.respondWith(
+            caches.open(CACHE_NAME).then(cache => {
+                return fetch(e.request).then(res => {
+                    console.log("Service Worker: Gunakan Cache " + e.request.url);
+                    cache.put(e.request.url, res.clone());
+                    return res;
+                })
+            })
+        );
+    }
     else {
         e.respondWith(
             caches.match(e.request, { ignoreSearch: true }).then(res => {
@@ -85,3 +85,24 @@ self.addEventListener("fetch", e => {
         )
     }
 })
+
+self.addEventListener('push', e => {
+    var body;
+    if (e.data) {
+        body = e.data.text();
+    } else {
+        body = 'Push message no payload';
+    }
+    var options = {
+        body: body,
+        icon: 'img/maskable_icon.png',
+        vibrate: [100, 50, 100],
+        data: {
+            dateOfArrival: Date.now(),
+            primaryKey: 1
+        }
+    };
+    e.waitUntil(
+        self.registration.showNotification('Push Notification', options)
+    );
+});
