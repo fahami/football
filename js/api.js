@@ -1,5 +1,4 @@
 var base_url = "https://api.football-data.org/v2/";
-var teams = [];
 status = (res) => {
   if (res.status != 200) {
     console.error("Error : " + res.status);
@@ -18,6 +17,7 @@ getTeams = () => {
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
       if (res) {
+        var teams = [];
         res.json()
           .then(data => {
             data.teams.forEach(team => {
@@ -66,12 +66,15 @@ getTeams = () => {
     .then(status)
     .then(json)
     .then(data => {
+      var teams = [];
       data.teams.forEach(team => {
         teams.push(team);
       });
       return teams;
     })
-    .then(_ => {
+    .then(teams => {
+      console.log("cache kosong");
+      console.log(teams);
       fetch(base_url + "competitions/2021/matches", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
         .then(status)
         .then(json)
