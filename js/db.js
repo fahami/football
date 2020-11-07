@@ -1,6 +1,6 @@
 var dbPromised = idb.open("footmatch", 1, (upgradeDb) => {
     var articlesObjectStore = upgradeDb.createObjectStore("teams", {
-        keyPath: "id"
+        keyPath: "tla"
     });
     articlesObjectStore.createIndex("name", "name", { unique: false });
 });
@@ -23,7 +23,21 @@ getAll = () => {
             var store = tx.objectStore("teams");
             return store.getAll();
         }).then(teams => {
+            console.log(teams);
             resolve(teams);
         })
     })
+}
+getById = (id) => {
+    return new Promise((resolve, reject) => {
+        dbPromised.then((db) => {
+            var tx = db.transaction("teams", "readonly");
+            var store = tx.objectStore("teams");
+            console.log(id);
+            return store.get(id.toString());
+        }).then((team) => {
+            console.log(team);
+            resolve(team);
+        });
+    });
 }

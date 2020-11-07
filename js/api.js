@@ -230,9 +230,23 @@ getTeamById = () => {
 getSavedTeams = () => {
   getAll().then(teams => {
     console.log(teams);
-    var savedTeams = "";
-    savedTeams += "<h1>Apalah</h1>";
-    document.getElementById("body-content").innerHTML = savedTeams;
+    var savedTeams = `<div class="row center-align">`;
+    teams.forEach(data => {
+      savedTeams += `
+      <div class="col s6">
+        <a href="team.html?id=${data.tla}&saved=true">
+        <div class="card">
+          <div class="card-image waves-effect waves-block waves-light">
+            <img src="${data.crestUrl}" class="club-logo"/>
+          </div>
+          <div class="card-content">
+            <span class="card-title truncate">${data.name}</span>
+          </div>
+        </div>
+        </a>
+      </div>`;
+    })
+    document.getElementById("teams").innerHTML = savedTeams + "</div>";
   })
 }
 
@@ -240,6 +254,7 @@ getSavedTeamById = () => {
   var urlParams = new URLSearchParams(window.location.search);
   var idParam = urlParams.get("id");
   getById(idParam).then(data => {
+    console.log(data)
     var teamHTML = "", competitionsHTML = "";
     teamHTML = `
       <div class="card">
@@ -283,16 +298,4 @@ getSavedTeamById = () => {
     })
     document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
   })
-}
-
-getById = (id) => {
-  return new Promise((resolve, reject) => {
-    dbPromised.then((db) => {
-      var tx = db.transaction("teams", "readonly");
-      var store = tx.objectStore("teams");
-      return store.get(id);
-    }).then((article) => {
-      resolve(article);
-    });
-  });
 }
