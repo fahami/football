@@ -12,7 +12,7 @@ saveTeam = (team) => {
         store.add(team);
         return tx.complete;
     }).then(_ => {
-        console.log("Tim favorit berhasil disimpan: " + team.name);
+        M.toast({html:'Subscribed to '+ team.name})
     })
 };
 
@@ -23,7 +23,7 @@ deleteTeam = (team) => {
         store.delete(team);
         return tx.complete;
     }).then(_ => {
-        console.log("Tim favorit berhasil dihapus: " + team);
+        M.toast({html: 'Successfully deleted'})
         getSubsList();
     })
 }

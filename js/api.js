@@ -121,9 +121,12 @@ getTeams = () => {
           .then(data => {
             var teamsHTML = "";
             data.teams.forEach(data => {
-              teamsHTML += `<option value="${data.id}">${data.name}</option>`;
+              teamsHTML += `<option value="${data.id}" data-icon="${data.crestUrl}">${data.name}</option>`;
             });
             document.getElementById("clubId").innerHTML = teamsHTML;
+          }).then(() => {
+            var elems = document.querySelectorAll('select');
+            M.FormSelect.init(elems);
           })
       }
     })
@@ -134,10 +137,14 @@ getTeams = () => {
     .then(data => {
       var teamsHTML = "";
       data.teams.forEach(data => {
-        teamsHTML += `<option value="${data.id}">${data.name}</option>`;
+        teamsHTML += `<option value="${data.id}" data-icon="${data.crestUrl}">${data.name}</option>`;
       });
       document.getElementById("clubId").innerHTML = teamsHTML;
     })
+    .then(() => {
+      var elems = document.querySelectorAll('select');
+      M.FormSelect.init(elems);
+    });
 }
 
 getTeamById = () => {

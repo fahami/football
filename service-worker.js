@@ -100,6 +100,6 @@ self.addEventListener('push', e => {
         }
     };
     e.waitUntil(
-        self.registration.showNotification('Push Notification', options)
+        self.registration.showNotification('FootMatch Notification', options)
     );
 });
