@@ -317,36 +317,7 @@ getSubsId = (id) => {
     .then(json)
     .then(res => {
       saveTeam(res)
-      console.log(res);
+      getSubsList()
     })
+    .catch("getSubs tidak dijalankan")
 }
-
-getSubsList = _ => {
-  getAll().then(teams => {
-      var teamHTML = `
-      <table>
-        <thead>
-          <tr>
-              <th>Name</th>
-              <th>Founded</th>
-              <th>Venue</th>
-              <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>`;
-      teams.forEach(team => {
-          teamHTML += `
-          <tr>
-            <td>${team.name}</td>
-            <td>${team.founded}</td>
-            <td>${team.venue}</td>
-            <td>
-              <a id="${team.id}" class="waves-effect waves-light btn btn-floating">
-                <i class="material-icons right">delete</i>
-              </a>
-            </td>
-          </tr>`;
-      });
-      document.getElementById("subscriptions").innerHTML += teamHTML + "</tbody></table>";
-  })
-};
