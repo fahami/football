@@ -16,6 +16,7 @@ error = (err) => {
 getMatches = () => {
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
+      console.log("getMatches dari cache");
       if (res) {
         res.json()
           .then(data => {
@@ -115,6 +116,20 @@ getMatches = () => {
 }
 
 getTeams = () => {
+  if ('caches' in window) {
+    caches.match(base_url + "competitions/2021/teams").then(res => {
+      if (res) {
+        res.json()
+          .then(data => {
+            var teamsHTML = "";
+            data.teams.forEach(data => {
+              teamsHTML += `<option value="${data.id}">${data.name}</option>`;
+            });
+            document.getElementById("clubId").innerHTML = teamsHTML;
+          })
+      }
+    })
+  };
   fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
     .then(status)
     .then(json)
@@ -246,9 +261,6 @@ getSavedTeams = () => {
             <a href="team.html?id=${data.tla}&saved=true">
               <img src="${data.crestUrl}" class="club-logo">
             </a>
-            <a class="btn-floating halfway-fab waves-effect waves-light red">
-              <i class="material-icons">delete</i>
-            </a>
           </div>
           <div class="card-content">
             <span class="card-title truncate">${data.name}</span>
@@ -312,6 +324,17 @@ getSavedTeamById = () => {
 }
 
 getSubsId = (id) => {
+  if ('caches' in window) {
+    caches.match(base_url + "teams/" + id).then(res => {
+      if (res) {
+        res.json().then(res => {
+          saveTeam(res)
+          getSubsList()
+        })
+          .catch("getSubs tidak dijalankan")
+      }
+    })
+  };
   fetch(base_url + "teams/" + id, { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
     .then(status)
     .then(json)

@@ -54,22 +54,31 @@ self.addEventListener("activate", e => {
 self.addEventListener("fetch", event => {
     var base_url = "https://api.football-data.org/v2/";
     var base_url_logo = "https://crests.football-data.org/";
-    if (event.request.url.indexOf(base_url) || event.request.url.indexOf(base_url_logo) > -1) {
-		event.respondWith(
-			caches.open(CACHE_NAME).then((cache) => {
-				return fetch(event.request).then((response) => {
-					cache.put(event.request.url, response.clone());
-					return response;
-				})
-			})
-		);
-	} else {
-		event.respondWith(
-			caches.match(event.request,{ignoreSearch:true}).then((response) => {
-				return response || fetch(event.request);
-			})
-		)
-	}
+    if (event.request.url.indexOf(base_url) > -1) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then((cache) => {
+                return fetch(event.request).then((response) => {
+                    cache.put(event.request.url, response.clone());
+                    return response;
+                })
+            })
+        );
+    } else if (event.request.url.indexOf(base_url_logo) > -1) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then((cache) => {
+                return fetch(event.request).then((response) => {
+                    cache.put(event.request.url, response.clone());
+                    return response;
+                })
+            })
+        );
+    } else {
+        event.respondWith(
+            caches.match(event.request, { ignoreSearch: true }).then((response) => {
+                return response || fetch(event.request);
+            })
+        )
+    }
 })
 
 self.addEventListener('push', e => {

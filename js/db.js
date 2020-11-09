@@ -67,7 +67,7 @@ getSubsList = _ => {
               <td>${team.founded}</td>
               <td>${team.venue}</td>
               <td>
-                <button onClick="deleteTeam('${team.tla}')" class="waves-effect waves-light btn btn-floating removeButton">
+                <button id="${team.id}" onClick="deleteTeam('${team.tla}')" class="waves-effect waves-light btn btn-floating removeButton">
                   <i class="material-icons right">delete</i>
                 </button>
               </td>
