@@ -1,113 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>FootMatch</title>
-		<link
-			href="https://fonts.googleapis.com/icon?family=Material+Icons"
-			rel="stylesheet"
-		/>
-		<link rel="manifest" href="manifest.json" />
-		<script src="js/materialize.js"></script>
-	</head>
-	<body>
-		<nav class="green darken-2" role="navigation">
-			<div class="nav-wrapper">
-				<a href="./" class="brand-logo center">FootMatch</a>
-				<a href="#" data-target="mobile-nav" class="sidenav-trigger">
-					<i class="material-icons">menu</i>
-				</a>
-				<ul class="topnav right hide-on-med-and-down"></ul>
-				<ul class="sidenav" id="mobile-nav"></ul>
-			</div>
-		</nav>
-		<div class="container" id="body-content"></div>
-		<link rel="stylesheet" href="css/materialize.min.css" />
-		
-		<script src="js/nav.js"></script>
-		<script src="js/idb.js"></script>
-		<script src="js/db.js"></script>
-		<script src="js/api.js"></script>
-		<script>
-			if ("serviceWorker" in navigator) {
-				window.addEventListener("load", () => {
-					navigator.serviceWorker
-						.register("service-worker.js")
-						.then(() => console.log("Pendaftaran Service Worker Berhasil"))
-						.catch(() => console.error("Service Worker gagal didaftarkan"));
-				});
-			} else {
-				console.error("Browser ini tidak mendukung service worker.");
-			}
-			if ("Notification" in window) {
-				requestPermission();
-			} else {
-				console.error("Browser tidak mendukung notifikasi.");
-			}
-			function requestPermission() {
-				Notification.requestPermission().then((result) => {
-					if (result === "denied") {
-						console.log("Fitur notifikasi tidak diijinkan.");
-						return;
-					} else if (result === "default") {
-						console.error("Pengguna menutup kotak dialog permintaan ijin.");
-						return;
-					}
 
-					console.log("Fitur notifikasi diijinkan.");
-				});
-			}
-			if ("PushManager" in window) {
-				navigator.serviceWorker.getRegistration().then(function (registration) {
-					registration.pushManager.subscribe({
-							userVisibleOnly: true,
-							applicationServerKey: urlBase64ToUint8Array(
-								"BHGC-JJ3nsXnhH2IvwCPmgkVQqz4vv_U29h2scKfI7YlC5kzcRB0MFKr5djlbD12gxsdMKakivOdBNPDfhHV0rs"
-							),
-						})
-						.then(function (subscribe) {
-							console.log(
-								"Berhasil melakukan subscribe dengan endpoint: ",
-								subscribe.endpoint
-							);
-							console.log(
-								"Berhasil melakukan subscribe dengan p256dh key: ",
-								btoa(
-									String.fromCharCode.apply(
-										null,
-										new Uint8Array(subscribe.getKey("p256dh"))
-									)
-								)
-							);
-							console.log(
-								"Berhasil melakukan subscribe dengan auth key: ",
-								btoa(
-									String.fromCharCode.apply(
-										null,
-										new Uint8Array(subscribe.getKey("auth"))
-									)
-								)
-							);
-						})
-						.catch(function (e) {
-							console.error("Tidak dapat melakukan subscribe ", e.message);
-						});
-				});
-			}
-			function urlBase64ToUint8Array(base64String) {
-				const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-				const base64 = (base64String + padding)
-					.replace(/-/g, "+")
-					.replace(/_/g, "/");
-				const rawData = window.atob(base64);
-				const outputArray = new Uint8Array(rawData.length);
-				for (let i = 0; i < rawData.length; ++i) {
-					outputArray[i] = rawData.charCodeAt(i);
-				}
-				return outputArray;
-			}
-			
-		</script>
-	</body>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>FootMatch</title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+	<link rel="manifest" href="manifest.json" />
+	<script src="js/materialize.min.js"></script>
+</head>
+
+<body>
+	<nav class="green darken-2" role="navigation">
+		<div class="nav-wrapper">
+			<a href="./" class="brand-logo center">FootMatch</a>
+			<a href="#" data-target="mobile-nav" class="sidenav-trigger">
+				<i class="material-icons">menu</i>
+			</a>
+			<ul class="topnav right hide-on-med-and-down"></ul>
+			<ul class="sidenav" id="mobile-nav"></ul>
+		</div>
+	</nav>
+	<div class="container" id="body-content"></div>
+	<link rel="stylesheet" href="css/materialize.min.css" />
+	<script src="js/nav.js"></script>
+	<script src="js/idb.js"></script>
+	<script src="js/db.js"></script>
+	<script src="js/api.js"></script>
+	<script src="js/notify.js"></script>
+	<script>
+		if ("serviceWorker" in navigator) {
+			window.addEventListener("load", () => {
+				navigator.serviceWorker.register("service-worker.js")
+					.then(() => console.log("Pendaftaran Service Worker Berhasil"))
+					.catch(() => console.error("Service Worker gagal didaftarkan"));
+			});
+		} else {
+			console.error("Browser ini tidak mendukung service worker.");
+		}
+	</script>
+</body>
+
 </html>

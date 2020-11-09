@@ -1,4 +1,4 @@
-const CACHE_NAME = "footmatch-v1";
+const CACHE_NAME = "footmatch";
 var urlsToCache = [
     "/",
     "index.html",
@@ -10,6 +10,7 @@ var urlsToCache = [
     "js/db.js",
     "js/nav.js",
     "js/api.js",
+    "js/notify.js",
     "manifest.json",
     "images/icons/icon-512x512.png",
     "images/icons/icon-384x384.png",
@@ -22,6 +23,7 @@ var urlsToCache = [
     "images/maskable_icon.png",
     "pages/home.html",
     "pages/teams.html",
+    "pages/saved.html",
     "https://fonts.googleapis.com/icon?family=Material+Icons",
     "https://fonts.gstatic.com/s/materialicons/v55/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2"
 ];

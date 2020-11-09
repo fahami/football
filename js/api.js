@@ -13,106 +13,104 @@ json = (res) => {
 error = (err) => {
   console.error(`Error : ${err}`);
 }
-getMatches = () => {
+getMatches = _ => {
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
       console.log("getMatches dari cache");
       if (res) {
-        res.json()
-          .then(data => {
-            var teams = [];
-            data.teams.forEach(team => {
-              teams.push(team);
-            });
-            return teams;
+        res.json().then(data => {
+          var teams = [];
+          data.teams.forEach(team => {
+            teams.push(team);
+          });
+          return teams;
+        }).then(teams => {
+          caches.match(base_url + "competitions/2021/matches").then(res => {
+            if (res) {
+              res.json().then(data => {
+                var champLeagueHTML = "";
+                data.matches.forEach(match => {
+                  teams.forEach((tim) => {
+                    if ((match.homeTeam.id == tim.id) && (tim.crestUrl != null)) {
+                      champLeagueHTML += `
+                        <div class="card-panel center-align">
+                        <p class="card-title">Premiere League</p>
+                        <div class="row">
+                          <div class="col s4 m5">
+                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
+                            <a href="team.html?id=${match.homeTeam.id}">
+                              <h6 class="flow-text">${match.homeTeam.name}</h6>
+                            </a>
+                            <small>Home</small>
+                          </div>
+                          <div class="col s4 m2">
+                            <h4>${match.score.fullTime.homeTeam ?? "0"} : ${match.score.fullTime.awayTeam ?? "0"}</h4>
+                            <span>${match.status}</span>
+                          </div>
+                          <div class="col s4 m5">
+                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
+                            <a href="team.html?id=${match.awayTeam.id}">
+                              <h6 class="flow-text">${match.awayTeam.name}</h6>
+                            </a>
+                            <small>Away</small>
+                          </div>
+                        </div>
+                        <p class="chip">${new Date(match.utcDate).toLocaleString("id", { year: 'numeric', month: 'short', day: 'numeric' }) + " Pukul " + new Date(match.utcDate).toLocaleString("id", { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}</p>
+                      </div>`;
+                    }
+                  });
+                });
+                document.getElementById("matches").innerHTML = champLeagueHTML;
+              })
+            }
           })
-          .then((teams) => {
-            caches.match(base_url + "competitions/2021/matches").then(res => {
-              if (res) {
-                res.json()
-                  .then(data => {
-                    var champLeagueHTML = "";
-                    data.matches.forEach(match => {
-                      teams.forEach((tim) => {
-                        if ((match.homeTeam.id == tim.id) && (tim.crestUrl != null)) {
-                          champLeagueHTML += `
-                            <div class="card-panel center-align">
-                                <p class="card-title">Premiere League</p>
-                                <div class="row">
-                                <div class="col s4 m5">
-                                    <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
-                                    <a href="team.html?id=${match.homeTeam.id}"><h6 class="flow-text">${match.homeTeam.name}</h6></a>
-                                    <small>Home</small>
-                                </div>
-                                <div class="col s4 m2">
-                                <h4>${match.score.fullTime.homeTeam ?? "0"} : ${match.score.fullTime.awayTeam ?? "0"}</h4>
-                                <span>${match.status}</span>
-                                </div>
-                                <div class="col s4 m5">
-                                    <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
-                                    <a href="team.html?id=${match.awayTeam.id}"><h6 class="flow-text">${match.awayTeam.name}</h6></a>
-                                    <small>Away</small>
-                                </div>
-                                </div>
-                            </div>`;
-                        }
-                      });
-                    });
-                    document.getElementById("matches").innerHTML = champLeagueHTML;
-                  })
-              }
-            })
-          })
+        })
       }
     })
   };
-  fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
-    .then(status)
-    .then(json)
-    .then(data => {
-      var teams = [];
-      data.teams.forEach(team => {
-        teams.push(team);
+  fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } }).then(status).then(json).then(data => {
+    var teams = [];
+    data.teams.forEach(team => {
+      teams.push(team);
+    });
+    return teams;
+  }).then(teams => {
+    fetch(base_url + "competitions/2021/matches", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } }).then(status).then(json).then(data => {
+      var champLeagueHTML = "";
+      data.matches.forEach(match => {
+        teams.forEach(tim => {
+          if ((match.homeTeam.id == tim.id) && (tim.crestUrl != null)) {
+            champLeagueHTML += `
+            <div class="card-panel center-align">
+            <p class="card-title">Premiere League</p>
+            <div class="row">
+              <div class="col s4 m5">
+                <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
+                <a href="team.html?id=${match.homeTeam.id}">
+                  <h6 class="flow-text">${match.homeTeam.name}</h6>
+                </a>
+                <small>Home</small>
+              </div>
+              <div class="col s4 m2">
+                <h4>${match.score.fullTime.homeTeam ?? "0"} : ${match.score.fullTime.awayTeam ?? "0"}</h4>
+                <span>${match.status}</span>
+              </div>
+              <div class="col s4 m5">
+                <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
+                <a href="team.html?id=${match.awayTeam.id}">
+                  <h6 class="flow-text">${match.awayTeam.name}</h6>
+                </a>
+                <small>Away</small>
+              </div>
+            </div>
+            <p class="chip">${new Date(match.utcDate).toLocaleString("id", { year: 'numeric', month: 'short', day: 'numeric' }) + " Pukul " + new Date(match.utcDate).toLocaleString("id", { hour: '2-digit', minute: '2-digit', timeZoneName: 'short' })}</p>
+          </div>`;
+          }
+        });
       });
-      return teams;
-    })
-    .then(teams => {
-      fetch(base_url + "competitions/2021/matches", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
-        .then(status)
-        .then(json)
-        .then(data => {
-          var champLeagueHTML = "";
-          data.matches.forEach(match => {
-            teams.forEach(tim => {
-              if ((match.homeTeam.id == tim.id) && (tim.crestUrl != null)) {
-                champLeagueHTML += `
-                  <div class="card-panel center-align">
-                      <p class="card-title">Premiere League</p>
-                      <div class="row">
-                        <div class="col s4 m5">
-                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
-                            <a href="team.html?id=${match.homeTeam.id}"><h6 class="flow-text">${match.homeTeam.name}</h6></a>
-                            <small>Home</small>
-                        </div>
-                        <div class="col s4 m2">
-                        <h4>${match.score.fullTime.homeTeam ?? "0"} : ${match.score.fullTime.awayTeam ?? "0"}</h4>
-                        <span>${match.status}</span>
-                        </div>
-                        <div class="col s4 m5">
-                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
-                            <a href="team.html?id=${match.awayTeam.id}"><h6 class="flow-text">${match.awayTeam.name}</h6></a>
-                            <small>Away</small>
-                        </div>
-                      </div>
-                  </div>`;
-              }
-            });
-          });
-          document.getElementById("matches").innerHTML = champLeagueHTML;
-        })
-        .catch(error);
-    })
-    .catch(error);
+      document.getElementById("matches").innerHTML = champLeagueHTML;
+    }).catch(error);
+  }).catch(error);
 }
 
 getTeams = () => {
@@ -147,7 +145,7 @@ getTeamById = () => {
     var urlParams = new URLSearchParams(window.location.search);
     var idParam = urlParams.get("id");
     if ('caches' in window) {
-      caches.match(base_url + 'team/' + idParam)
+      caches.match(base_url + 'teams/' + idParam)
         .then(res => {
           if (res) {
             res.json()
