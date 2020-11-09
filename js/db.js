@@ -12,11 +12,12 @@ saveTeam = (team) => {
         console.log(team);
         store.add(team);
         return tx.complete;
-    }).then(() => {
+    }).then(_ => {
         console.log("Tim favorit berhasil disimpan");
     })
 };
-getAll = () => {
+
+getAll = _ => {
     return new Promise((resolve, reject) => {
         dbPromised.then(db => {
             var tx = db.transaction("teams", "readonly");

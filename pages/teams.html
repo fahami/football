@@ -6,17 +6,25 @@
 		text-overflow: ellipsis;
 	}
 	.club-logo {
-		max-height: 40vw;
+		max-height: 12em;
 		max-width: 100%;
 		margin: 0 auto;
 		padding: 1em;
 	}
-	.card-panel, .card-content{
+	.card-panel,
+	.card-content {
 		padding: 16px;
 	}
 </style>
+<h4 class="align-center">Subscribe to Team</h4>
+<select class="browser-default" id="clubId"></select>
+<button class="btn green" onclick="insertTeam()">Langganan</button>
+<div id="subscriptions"></div>
 <div class="row">
 	<div class="col s12 m12" id="teams">
-		<!-- Card berisi artikel akan disisipkan ke dalam sini. -->
 	</div>
 </div>
+<script>
+	var clubId = document.getElementById("clubId");
+	console.log(clubId);
+</script>

@@ -13,10 +13,9 @@ json = (res) => {
 error = (err) => {
   console.error(`Error : ${err}`);
 }
-getTeams = () => {
+getMatches = () => {
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
-      console.log("Gunakan dari caches");
       if (res) {
         res.json()
           .then(data => {
@@ -66,7 +65,6 @@ getTeams = () => {
       }
     })
   };
-  console.log("Gunakan dari network");
   fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
     .then(status)
     .then(json)
@@ -116,6 +114,19 @@ getTeams = () => {
     .catch(error);
 }
 
+getTeams = () => {
+  fetch(base_url + "competitions/2021/teams", { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
+    .then(status)
+    .then(json)
+    .then(data => {
+      var teamsHTML = "";
+      data.teams.forEach(data => {
+        teamsHTML += `<option value="${data.id}">${data.name}</option>`;
+      });
+      document.getElementById("clubId").innerHTML = teamsHTML;
+    })
+}
+
 getTeamById = () => {
   return new Promise((resolve, reject) => {
     var urlParams = new URLSearchParams(window.location.search);
@@ -126,7 +137,6 @@ getTeamById = () => {
           if (res) {
             res.json()
               .then(data => {
-                console.log("dapat data tim dari cache");
                 var teamHTML = "", competitionsHTML = "";
                 teamHTML = `
                   <div class="card">
@@ -175,7 +185,6 @@ getTeamById = () => {
           }
         })
     };
-    console.log("getTeamById dari network");
     fetch(base_url + "teams/" + idParam, { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
       .then(status)
       .then(json)
@@ -200,7 +209,6 @@ getTeamById = () => {
         })
         document.getElementById("body-content").innerHTML = teamHTML;
         document.getElementById(`${data.id}`).innerHTML = competitionsHTML;
-        console.log(data);
         return data;
       })
       .then(player => {
@@ -259,7 +267,6 @@ getSavedTeamById = () => {
   var urlParams = new URLSearchParams(window.location.search);
   var idParam = urlParams.get("id");
   getById(idParam).then(data => {
-    console.log(data)
     var teamHTML = "", competitionsHTML = "";
     teamHTML = `
       <div class="card">
@@ -280,7 +287,6 @@ getSavedTeamById = () => {
     })
     document.getElementById("body-content").innerHTML = teamHTML;
     document.getElementById(`${data.id}`).innerHTML = competitionsHTML;
-    console.log(data);
     return data;
   }).then(player => {
     var playerHTML = `
@@ -304,3 +310,43 @@ getSavedTeamById = () => {
     document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
   })
 }
+
+getSubsId = (id) => {
+  fetch(base_url + "teams/" + id, { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
+    .then(status)
+    .then(json)
+    .then(res => {
+      saveTeam(res)
+      console.log(res);
+    })
+}
+
+getSubsList = _ => {
+  getAll().then(teams => {
+      var teamHTML = `
+      <table>
+        <thead>
+          <tr>
+              <th>Name</th>
+              <th>Founded</th>
+              <th>Venue</th>
+              <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>`;
+      teams.forEach(team => {
+          teamHTML += `
+          <tr>
+            <td>${team.name}</td>
+            <td>${team.founded}</td>
+            <td>${team.venue}</td>
+            <td>
+              <a id="${team.id}" class="waves-effect waves-light btn btn-floating">
+                <i class="material-icons right">delete</i>
+              </a>
+            </td>
+          </tr>`;
+      });
+      document.getElementById("subscriptions").innerHTML += teamHTML + "</tbody></table>";
+  })
+};
