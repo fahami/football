@@ -3,7 +3,7 @@
     "short_name": "FootMatch",
     "description": "Your daily update football score apps",
     "gcm_sender_id": "124693896473",
-    "start_url": "/",
+    "start_url": "/index.html",
     "scope": "/",
     "display": "standalone",
     "background_color": "#0DB630",

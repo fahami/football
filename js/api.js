@@ -15,13 +15,13 @@ error = (err) => {
   console.error(`Error : ${err}`);
 }
 getMatches = _ => {
+  var teams = [];
   preloader.removeAttribute("hidden");
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
       console.log("getMatches dari cache");
       if (res) {
         res.json().then(data => {
-          var teams = [];
           data.teams.forEach(team => {
             teams.push(team);
           });
@@ -39,7 +39,7 @@ getMatches = _ => {
                         <p class="card-title">Premiere League</p>
                         <div class="row">
                           <div class="col s4 m5">
-                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
+                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg" loading="lazy">
                             <a href="team.html?id=${match.homeTeam.id}">
                               <h6 class="flow-text">${match.homeTeam.name}</h6>
                             </a>
@@ -50,7 +50,7 @@ getMatches = _ => {
                             <span>${match.status}</span>
                           </div>
                           <div class="col s4 m5">
-                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
+                            <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg" loading="lazy">
                             <a href="team.html?id=${match.awayTeam.id}">
                               <h6 class="flow-text">${match.awayTeam.name}</h6>
                             </a>
@@ -88,7 +88,7 @@ getMatches = _ => {
             <p class="card-title">Premiere League</p>
             <div class="row">
               <div class="col s4 m5">
-                <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg">
+                <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.homeTeam.id}.svg" loading="lazy">
                 <a href="team.html?id=${match.homeTeam.id}">
                   <h6 class="flow-text">${match.homeTeam.name}</h6>
                 </a>
@@ -99,7 +99,7 @@ getMatches = _ => {
                 <span>${match.status}</span>
               </div>
               <div class="col s4 m5">
-                <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg">
+                <img class="materialboxed club-logo" src="https://crests.football-data.org/${match.awayTeam.id}.svg" loading="lazy">
                 <a href="team.html?id=${match.awayTeam.id}">
                   <h6 class="flow-text">${match.awayTeam.name}</h6>
                 </a>
@@ -115,6 +115,7 @@ getMatches = _ => {
       document.getElementById("matches").innerHTML = champLeagueHTML;
     }).catch(error);
   }).catch(error);
+  console.log(teams);
 }
 
 getTeams = () => {
@@ -171,7 +172,7 @@ getTeamById = () => {
                 teamHTML = `
                   <div class="card">
                       <div class="card-image waves-effect waves-block waves-light">
-                        <img src="${data.crestUrl}" class="club-logo"/>
+                        <img src="${data.crestUrl}" class="club-logo" loading="lazy"/>
                       </div>
                       <div class="card-content">
                         <span class="card-title">${data.name}</span>
@@ -225,7 +226,7 @@ getTeamById = () => {
         teamHTML = `
           <div class="card">
             <div class="card-image waves-effect waves-block waves-light">
-              <img src="${data.crestUrl}" class="club-logo"/>
+              <img src="${data.crestUrl}" class="club-logo" loading="lazy"/>
             </div>
             <div class="card-content">
               <span class="card-title">${data.name}</span>
@@ -278,7 +279,7 @@ getSavedTeams = () => {
         <div class="card">
           <div class="card-image">
             <a href="team.html?id=${data.tla}&saved=true">
-              <img src="${data.crestUrl}" class="club-logo">
+              <img src="${data.crestUrl}" class="club-logo" loading="lazy">
             </a>
           </div>
           <div class="card-content">
@@ -304,7 +305,7 @@ getSavedTeamById = () => {
     teamHTML = `
       <div class="card">
         <div class="card-image waves-effect waves-block waves-light">
-          <img src="${data.crestUrl}" class="club-logo"/>
+          <img src="${data.crestUrl}" class="club-logo" loading="lazy"/>
         </div>
         <div class="card-content">
           <span class="card-title">${data.name}</span>
