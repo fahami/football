@@ -1,4 +1,5 @@
 var base_url = "https://api.football-data.org/v2/";
+var preloader = document.getElementById("preloader");
 status = (res) => {
   if (res.status != 200) {
     console.error("Error : " + res.status);
@@ -14,6 +15,7 @@ error = (err) => {
   console.error(`Error : ${err}`);
 }
 getMatches = _ => {
+  preloader.removeAttribute("hidden");
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
       console.log("getMatches dari cache");
@@ -60,6 +62,7 @@ getMatches = _ => {
                     }
                   });
                 });
+                preloader.setAttribute("hidden", "");
                 document.getElementById("matches").innerHTML = champLeagueHTML;
               })
             }
@@ -108,12 +111,14 @@ getMatches = _ => {
           }
         });
       });
+      preloader.setAttribute("hidden", "");
       document.getElementById("matches").innerHTML = champLeagueHTML;
     }).catch(error);
   }).catch(error);
 }
 
 getTeams = () => {
+  preloader.removeAttribute("hidden");
   if ('caches' in window) {
     caches.match(base_url + "competitions/2021/teams").then(res => {
       if (res) {
@@ -123,6 +128,8 @@ getTeams = () => {
             data.teams.forEach(data => {
               teamsHTML += `<option value="${data.id}" data-icon="${data.crestUrl}">${data.name}</option>`;
             });
+
+            preloader.setAttribute("hidden", "");
             document.getElementById("clubId").innerHTML = teamsHTML;
           }).then(() => {
             var elems = document.querySelectorAll('select');
@@ -139,6 +146,7 @@ getTeams = () => {
       data.teams.forEach(data => {
         teamsHTML += `<option value="${data.id}" data-icon="${data.crestUrl}">${data.name}</option>`;
       });
+      preloader.setAttribute("hidden", "");
       document.getElementById("clubId").innerHTML = teamsHTML;
     })
     .then(() => {
@@ -148,6 +156,8 @@ getTeams = () => {
 }
 
 getTeamById = () => {
+  preloader.removeAttribute("hidden");
+
   return new Promise((resolve, reject) => {
     var urlParams = new URLSearchParams(window.location.search);
     var idParam = urlParams.get("id");
@@ -198,13 +208,15 @@ getTeamById = () => {
                       <td>${player.position ?? "Official"}</td>
                       <td class="truncate">${player.role}</td>
                     </tr>`;
-                })
+                });
+                preloader.setAttribute("hidden", "");
                 document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
                 resolve(player);
               })
           }
         })
     };
+
     fetch(base_url + "teams/" + idParam, { headers: { "X-Auth-Token": "126082a1d2054f8fb241c26d07386da3" } })
       .then(status)
       .then(json)
@@ -249,13 +261,15 @@ getTeamById = () => {
               <td>${player.position ?? "Official"}</td>
               <td class="truncate">${player.role}</td>
             </tr>`;
-        })
+        });
+        preloader.setAttribute("hidden", "");
         document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
         resolve(player);
       })
   })
 }
 getSavedTeams = () => {
+  preloader.removeAttribute("hidden");
   getAll().then(teams => {
     var savedTeams = `<div class="row">`;
     teams.forEach(data => {
@@ -276,11 +290,13 @@ getSavedTeams = () => {
         </div>
       </div>`;
     })
+    preloader.setAttribute("hidden", "");
     document.getElementById("saved").innerHTML = savedTeams + "</div>";
   })
 }
 
 getSavedTeamById = () => {
+  preloader.removeAttribute("hidden");
   var urlParams = new URLSearchParams(window.location.search);
   var idParam = urlParams.get("id");
   getById(idParam).then(data => {
@@ -324,17 +340,20 @@ getSavedTeamById = () => {
             <td class="truncate">${player.role}</td>
           </tr>`;
     })
+    preloader.setAttribute("hidden", "");
     document.getElementById("body-content").innerHTML += playerHTML + "</tbody></table>";
   })
 }
 
 getSubsId = (id) => {
+  preloader.removeAttribute("hidden");
   if ('caches' in window) {
     caches.match(base_url + "teams/" + id).then(res => {
       if (res) {
         res.json().then(res => {
           saveTeam(res)
           getSubsList()
+          preloader.setAttribute("hidden", "");
         })
           .catch("getSubs tidak dijalankan")
       }
@@ -346,6 +365,7 @@ getSubsId = (id) => {
     .then(res => {
       saveTeam(res)
       getSubsList()
+      preloader.setAttribute("hidden", "");
     })
     .catch("getSubs tidak dijalankan")
 }
